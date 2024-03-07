@@ -6,6 +6,7 @@ import express from "express";
 const isProduction = process.env.NODE_ENV === "production";
 const port = process.env.PORT || 5173;
 const base = process.env.BASE || "/";
+const serviceBaseURL = "https://jsonplaceholder.typicode.com";
 
 // Cached production assets
 const templateHtml = isProduction
@@ -35,12 +36,15 @@ if (!isProduction) {
   app.use(base, sirv("./dist/client", { extensions: [] }));
 }
 
-app.use("/api/hello", async (req, res) => {
-  const q = req.query.search || "";
+app.use("/api/todos", async (req, res) => {
+  const start = req.query.start || 0;
+  const limit = req.query.limit || 10;
 
-  res.json({
-    search: { data: q ?? "Hello World" },
-  });
+  const data = await fetch(
+    `${serviceBaseURL}/todos?_start=${start}&_limit=${limit}`
+  ).then((res) => res.json());
+
+  res.json(data);
 });
 
 // Serve HTML
