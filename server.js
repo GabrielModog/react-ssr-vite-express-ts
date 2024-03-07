@@ -35,6 +35,14 @@ if (!isProduction) {
   app.use(base, sirv("./dist/client", { extensions: [] }));
 }
 
+app.use("/api/hello", async (req, res) => {
+  const q = req.query.search || "";
+
+  res.json({
+    search: { data: q ?? "Hello World" },
+  });
+});
+
 // Serve HTML
 app.use("*", async (req, res) => {
   try {
