@@ -36,6 +36,12 @@ if (!isProduction) {
   app.use(base, sirv("./dist/client", { extensions: [] }));
 }
 
+app.get("/api/hello", (req, res) => {
+  res.json({
+    message: "Hello from the API!",
+  });
+});
+
 app.use("/api/todos", async (req, res) => {
   const start = req.query.start || 0;
   const limit = req.query.limit || 10;

@@ -32,9 +32,39 @@
     animation: logo-spin infinite 20s linear;
   }
 }
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
 .card {
-  padding: 2em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 1rem;
+  background-color: #292929;
+  border: 1px solid #888;
+  transition: 450ms;
+  will-change: filter;
+  overflow: hidden;
+}
+.card:hover {
+  background-color: #1a1a1a;
+  border-color: #292929;
+  filter: drop-shadow(0 0 2em #dee7ff4d);
+}
+.card__content {
+  padding: 1rem;
+}
+.card__status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5rem;
+  font-size: 12px;
+  background-color: #1a1a1a;
+  border-left: 1px solid #292929;
 }
 
 .read-the-docs {

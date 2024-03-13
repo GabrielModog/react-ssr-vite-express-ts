@@ -1,10 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [todos, setTodos] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  async function loadTodos() {
+    try {
+      setLoading(true);
+      const data = await fetch("http://localhost:5173/api/todos");
+      const json = await data.json();
+      console.log(json);
+      setTodos(json);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadTodos();
+  }, []);
 
   return (
     <>
@@ -16,20 +35,29 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Vite + React + Express</h1>
+      {loading && (
+        <div>
+          <p>Loading...</p>
+        </div>
+      )}
+      {!loading && (
+        <div className="card-list">
+          {todos.length > 0 &&
+            todos.map((item: any) => (
+              <div key={item.id} className="card">
+                <div className="card__content">
+                  <h3>{item.title}</h3>
+                </div>
+                <div className="card__status">
+                  <p>{item.completed ? "Completed" : "Unfinished"}</p>
+                </div>
+              </div>
+            ))}
+        </div>
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
